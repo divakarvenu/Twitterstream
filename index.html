@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Site</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <style>
+        body { padding-top:50px; }
+        .twitter-tweet {
+            display: inline-block;
+            font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 16px;
+            border-color: #eee #ddd #bbb;
+            border-radius: 5px;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            margin: 10px 5px;
+            padding: 0 16px 16px 16px;
+            max-width: 468px;
+            margin:3%;
+            }
+
+            .twitter-tweet p {
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 20px;
+            }
+
+            .twitter-tweet a {
+            color: inherit;
+            font-weight: normal;
+            text-decoration: none;
+            outline: 0 none;
+            }
+
+            .twitter-tweet a:hover,
+            .twitter-tweet a:focus {
+            text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+        <div class="container-fluid">
+              
+        </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        var socket = io(window.location.href);
+        socket.on('connect',function(data){
+           console.log('connected');
+        })
+        socket.on('tweet', function (tweet) {
+            console.log(tweet);
+            $('.container-fluid').append('<div class="col-md-3 twitter-tweet">  <img class="card-img-top" src="..." alt="Card image cap"> <div class="card"> <div class="card-body"> <h6 class="card-subtitle mb-2 text-muted">@'+tweet.tweet.user.screen_name+'</h6> <p class="card-text">'+tweet.tweet.text+'</p></div> </div>');
+        });
+    </script>
+</body>
+
+</html>
