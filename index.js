@@ -18,7 +18,7 @@ function handler (req, res) {
 }
 
 io.on('connection', function(socket) {
-    var stream = T.stream('statuses/filter', { track: '#vbiday', language: 'en' })
+    var stream = T.stream('statuses/filter', { track: '#fun', language: 'en' })
 
     stream.on('tweet', function (tweet) {
         io.emit('tweet',{ 'tweet': tweet });
