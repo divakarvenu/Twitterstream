@@ -6,22 +6,17 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
-// // http://expressjs.com/en/starter/basic-routing.html
-// app.get('/', function(request, response) {
-//   response.sendFile(__dirname + '/index.html');
-// });
+
 
 
 
 io.on('connection', function(socket) {
 
-    T.get('search/tweets', { q: '#fun', count: 100 }, function(err, data, response) {
+    T.get('search/tweets', { q: '#coding', count: 100 }, function(err, data, response) {
       var tweetArray=[];
         for (let index = 0; index < data.statuses.length; index++) {
             const tweet = data.statuses[index];
@@ -41,7 +36,7 @@ io.on('connection', function(socket) {
         io.emit('allTweet',tweetArray)
     })
 
-    var stream = T.stream('statuses/filter', { track: '#fun', language: 'en' })
+    var stream = T.stream('statuses/filter', { track: '#coding', language: 'en' })
 
     stream.on('tweet', function (tweet) {
         io.emit('tweet',{ 'tweet': tweet });
@@ -49,10 +44,10 @@ io.on('connection', function(socket) {
 });
 
 var T = new Twit({
-  consumer_key:         '1vlF5wme6BuyZgANV1LGffFrG',
-  consumer_secret:      'd3v4fx1OoD5eN5vLujtED7MIySLyc46ciMRx8rDrQ3m1cUpY7t',
-  access_token:         '1333236546-EoofSCeyW9hMfxHAcsrit6bbZcPq4NLAkGI1TOX',
-  access_token_secret:  'zOs7RtUAShsgzbdRHknl5eYSGlnJs7xh6sueGS1C7B8xW',
+  consumer_key:         '',
+  consumer_secret:      '',
+  access_token:         '',
+  access_token_secret:  '',
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
