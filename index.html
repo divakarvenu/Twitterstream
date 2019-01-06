@@ -1,65 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sample Site</title>
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <style>
-        body { padding-top:50px; }
-        .twitter-tweet {
-            display: inline-block;
-            font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
-            font-size: 12px;
-            font-weight: bold;
-            line-height: 16px;
-            border-color: #eee #ddd #bbb;
-            border-radius: 5px;
-            border-style: solid;
-            border-width: 1px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-            margin: 10px 5px;
-            padding: 0 16px 16px 16px;
-            max-width: 468px;
-            margin:3%;
-            }
-
-            .twitter-tweet p {
-            font-size: 16px;
-            font-weight: normal;
-            line-height: 20px;
-            }
-
-            .twitter-tweet a {
-            color: inherit;
-            font-weight: normal;
-            text-decoration: none;
-            outline: 0 none;
-            }
-
-            .twitter-tweet a:hover,
-            .twitter-tweet a:focus {
-            text-decoration: underline;
-            }
-    </style>
-</head>
-<body>
-        <div class="container-fluid">
-              
+  <head>
+    <title>VBI Day-VisualBI Solutions-Twitter Wall</title>
+    <meta name="description" content="Twitter Wall for VBI Day in Visual BI Solutions">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="img-container">
+        <img id="image" src="https://cdn.glitch.com/d768145f-48dc-43e9-bee4-e94e5d26e098%2Fthumbnails%2Flogo.jpg?1546595650739"/>
+      </div>
+      <div class="tweet-container">
+        <div class="tweet-handle-container">
+            <div class="tweet-handle-image">
+              <img id="user-image" src="https://st2.depositphotos.com/4284329/8270/v/950/depositphotos_82700158-stock-illustration-event-agency-logo.jpg" />
+            </div>
+            <div class="tweet-handle-name">
+              <p id="user-name">Twitter Stream</p>
+              <p id="user-description">Using twitter stream API</p>
+            </div>
+          </div>
+        <div class="tweet-content" id="content">
+            Let the tweets slide one by one 
         </div>
-
-    <script src="/socket.io/socket.io.js"></script>
+        
+      </div>
+    </div>
+    <footer>
+      Made with Love by VBI View Team!
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        var socket = io(window.location.href);
-        socket.on('connect',function(data){
-           console.log('connected');
-        })
-        socket.on('tweet', function (tweet) {
-            console.log(tweet);
-            $('.container-fluid').append('<div class="col-md-3 twitter-tweet">  <img class="card-img-top" src="..." alt="Card image cap"> <div class="card"> <div class="card-body"> <h6 class="card-subtitle mb-2 text-muted">@'+tweet.tweet.user.screen_name+'</h6> <p class="card-text">'+tweet.tweet.text+'</p></div> </div>');
-        });
-    </script>
-</body>
+      var socket = io();
+      var tweetArray = [];
+      var index = 0;
+      socket.on('connect',function(data){
+         console.log('connected');
+      })
+      socket.on('tweet', function (tweet) {
+          console.log(tweet.tweet);
+          var tweetbody = {
+            'text': tweet.tweet.text,
+            'userScreenName': "@" + tweet.tweet.user.screen_name,
+            'userImage': tweet.tweet.user.profile_image_url_https,
+            'userDescription': tweet.tweet.user.description,
+          }
+          try {
+            if(tweet.tweet.entities.media[0].media_url_https) {
+              tweetbody['image'] = tweet.tweet.entities.media[0].media_url_https;
+            }
+          } catch(err) { }
+          tweetArray.unshift(tweetbody);
+          // loopArray();
+          // $('.container-fluid').append('<div class="col-md-3 twitter-tweet">  <img class="card-img-top" src="..." alt="Card image cap"> <div class="card"> <div class="card-body"> <h6 class="card-subtitle mb-2 text-muted">@'+tweet.tweet.user.screen_name+'</h6> <p class="card-text">'+tweet.tweet.text+'</p></div> </div>');
+      });
 
+      
+      socket.on('allTweet', function (tweet) {
+          console.log(tweet);
+          tweetArray=tweet;
+          loopArray();
+      });
+      
+
+      function loopArray() {
+        if(tweetArray.length > index) {
+          $(".img-container").removeClass('noimage');
+          var currentTweet = tweetArray[index];
+          index ++;
+            $('#user-name').html(currentTweet.userScreenName);
+            $('#user-description').html(currentTweet.userDescription);
+            $('#content').html(currentTweet.text);
+            $("#user-image").attr("src",currentTweet.userImage);
+            if(currentTweet.image) {            
+              $("#image").attr("src",currentTweet.image);            
+            }else{
+               $(".img-container").addClass('noimage');
+            }
+        } else {
+          index = 0;
+        }
+        setTimeout(loopArray, 10000);
+      }
+    </script>
+  </body>
 </html>
