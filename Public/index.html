@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="container">
@@ -40,12 +40,11 @@
       var socket = io();
       var tweetArray = [];
       var index = 0;
-     
       socket.on('connect',function(data){
          console.log('connected');
       })
-      
       socket.on('tweet', function (tweet) {
+          console.log(tweet.tweet);
           var tweetbody = {
             'text': tweet.tweet.text,
             'userScreenName': "@" + tweet.tweet.user.screen_name,
@@ -62,6 +61,7 @@
 
       
       socket.on('allTweet', function (tweet) {
+          console.log(tweet);
           tweetArray=tweet;
           loopArray();
       });
@@ -86,7 +86,6 @@
         }
         setTimeout(loopArray, 10000);
       }
-      
     </script>
   </body>
 </html>

@@ -12,10 +12,10 @@ var fs = require('fs');
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
-// http://expressjs.com/en/starter/basic-routing.html
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/index.html');
-});
+// // http://expressjs.com/en/starter/basic-routing.html
+// app.get('/', function(request, response) {
+//   response.sendFile(__dirname + '/index.html');
+// });
 
 
 
@@ -47,13 +47,14 @@ io.on('connection', function(socket) {
         io.emit('tweet',{ 'tweet': tweet });
     })
 });
-  var T = new Twit({
-      consumer_key:         '',
-      consumer_secret:      '',
-      access_token:         '',
-      access_token_secret:  '',
-      timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-  });
+
+var T = new Twit({
+  consumer_key:         '1vlF5wme6BuyZgANV1LGffFrG',
+  consumer_secret:      'd3v4fx1OoD5eN5vLujtED7MIySLyc46ciMRx8rDrQ3m1cUpY7t',
+  access_token:         '1333236546-EoofSCeyW9hMfxHAcsrit6bbZcPq4NLAkGI1TOX',
+  access_token_secret:  'zOs7RtUAShsgzbdRHknl5eYSGlnJs7xh6sueGS1C7B8xW',
+  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+});
 
 // listen for requests :)
 const listener = server.listen(process.env.PORT, function() {
